@@ -4,21 +4,50 @@ import avatarImg from './assets/avatar.png'
 const PROJECTS_DATA = [
   {
     id: 1,
-    title: '零售连锁 AI 智能体导购生态系统',
+    title: '企业级“数字员工”智能体底座',
     category: 'AI 智能体',
-    description: '针对大型零售连锁门店场景设计的多智能体（Multi-Agent）协同系统。系统集成智能导购、自动补货及智能客服等多个专用智能体，实现门店运营效率提升 25% 并显著优化顾客留存率。',
-    tags: ['AI 智能体', '智慧零售', '大语言模型', '多智能体协同'],
+    description: '面向连锁零售集团构建的数字员工底座平台。提供统一的智能体托管、私有知识库检索（RAG）、自动化工具链调用与多主体（Multi-Agent）协同架构，支撑财务、客服、督导等数十个运营场景的数字员工快速部署与无缝集成。',
+    tags: ['智能体底座', '数字员工', 'RAG 知识库', '多智能体协同'],
     icon: (
       <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-        <line x1="12" y1="22.08" x2="12" y2="12" />
+        <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
+        <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
+        <line x1="6" y1="6" x2="6.01" y2="6" />
+        <line x1="6" y1="18" x2="6.01" y2="18" />
       </svg>
     ),
     link: '#',
   },
   {
     id: 2,
+    title: '连锁门店 AI 智能预测与自动订货系统',
+    category: '大数据',
+    description: '针对生鲜与快消零售场景，构建融合深度学习时序预测与强化学习的智能订货模型。实时清洗整合历史销量、促销活动、天气及损耗多维数据，实现门店商品自动订货与精准补货，显著降低耗损率并提升周转效能。',
+    tags: ['智能订货', '时序预测', '损耗控制', '自动补货'],
+    icon: (
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <path d="M16 10a4 4 0 0 1-8 0" />
+      </svg>
+    ),
+    link: '#',
+  },
+  {
+    id: 3,
+    title: '零售连锁 AI 智能体导购生态系统',
+    category: 'AI 智能体',
+    description: '针对大型零售连锁门店场景设计的多智能体（Multi-Agent）协同系统。系统集成智能导购、自动补货及智能客服等多个专用智能体，实现门店运营效率提升 25% 并显著优化顾客留存率。',
+    tags: ['AI 智能体', '智慧零售', '大语言模型', '多智能体协同'],
+    icon: (
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
+    ),
+    link: '#',
+  },
+  {
+    id: 4,
     title: '零售门店大数据智能决策系统',
     category: '大数据',
     description: '构建连锁零售场景下的核心数据资产化模型。清洗并整合供应链与终端销售数据，实现智能选品、动态定价及精准营销，推动实体零售实现数据资产的商业化变现。',
@@ -33,7 +62,7 @@ const PROJECTS_DATA = [
     link: '#',
   },
   {
-    id: 3,
+    id: 5,
     title: '政-产-学-研-资-用 创新生态平台',
     category: '产业融合',
     description: '牵头构建以“政-产-学-研-资-用”为核心的复合型创新生态链。通过搭建平台机制与合作网络，高效对接多方资源，推动人工智能与大数据技术由基础研究向产业落地、商业变现的高效转化。',
@@ -51,19 +80,20 @@ const PROJECTS_DATA = [
 ];
 
 const SKILLS_DATA = [
-  { name: 'AI 智能体落地 (AI Agents)', primary: true },
-  { name: '大数据资产化与分析', primary: true },
-  { name: '连锁零售数字化转型', primary: true },
-  { name: '复合创新生态圈构建', primary: true },
-  { name: '产业深度融合', primary: false },
-  { name: '商业化变现与孵化', primary: false },
+  { name: '企业级智能体底座 (AI Agent Platform)', primary: true },
+  { name: '数字员工与流程自动化', primary: true },
+  { name: 'AI 智能订货与预测', primary: true },
+  { name: '大数据资产化与变现', primary: true },
+  { name: '连锁零售数字化转型', primary: false },
+  { name: '复合创新生态圈构建', primary: false },
   { name: '政-产-学-研 资源对接', primary: false },
-  { name: '顶层架构设计', primary: false },
+  { name: '顶层架构设计与推动', primary: false },
 ];
 
 function App() {
   const [theme, setTheme] = useState('dark');
   const [activeCategory, setActiveCategory] = useState('All');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -123,10 +153,32 @@ function App() {
           <a href="#hero" className="logo" style={{ letterSpacing: '0.05em' }}>
             <span className="text-gradient">张炜立</span>.dev
           </a>
-          <ul className="nav-links">
-            <li><a href="#about" className="nav-link">个人介绍</a></li>
-            <li><a href="#projects" className="nav-link">实践项目</a></li>
-            <li><a href="#contact" className="nav-link">生态合作</a></li>
+          
+          {/* 移动端汉堡菜单按钮 */}
+          <button 
+            className={`menu-toggle ${isMenuOpen ? 'open' : ''}`} 
+            onClick={() => setIsMenuOpen(!isMenuOpen)} 
+            aria-label="Toggle Menu"
+            title="切换导航菜单"
+          >
+            {isMenuOpen ? (
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            )}
+          </button>
+
+          <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
+            <li><a href="#about" className="nav-link" onClick={() => setIsMenuOpen(false)}>个人介绍</a></li>
+            <li><a href="#projects" className="nav-link" onClick={() => setIsMenuOpen(false)}>实践项目</a></li>
+            <li><a href="#contact" className="nav-link" onClick={() => setIsMenuOpen(false)}>生态合作</a></li>
             <li>
               <button 
                 onClick={toggleTheme} 
@@ -162,7 +214,7 @@ function App() {
         <div className="container grid-2">
           <div className="hero-content">
             <div className="hero-subtitle">百果园集团科技中心 生态负责人</div>
-            <h1 style={{ fontSize: '3rem', lineHeight: '1.25' }}>
+            <h1 className="hero-title">
               大数据与 AI 智能体 <br />
               <span className="text-gradient">落地实践专家</span>
             </h1>
@@ -192,7 +244,7 @@ function App() {
               张炜立，原深圳市大数据研究与应用协会秘书长、大数据分析师。具备超过 8 年大数据与人工智能产业应用经验，长期致力于推动 AI 与传统产业的深度融合，从顶层设计到项目落地的全链条推动能力。具备 10 年以上企业级资源协同与生态搭建经验，擅长构建以“政-产-学-研-资-用”为核心的复合型创新生态链。
             </p>
             <p style={{ marginBottom: '28px', textIndent: '2em', lineHeight: '1.75' }}>
-              通过构建平台机制与合作网络，推动人工智能技术从基础研究向产业落地、商业变现的高效转化。在零售连锁行业，积极探索并落地以“AI 智能体（AI Agents）”为代表的前沿技术应用，推动供应链与终端销售数据资产化，实现数据智能驱动实体零售的商业化增长。
+              通过构建平台机制与合作网络，推动人工智能技术从基础研究向产业落地、商业变现的高效转化。在零售连锁行业，积极探索并落地以“AI 智能体（AI Agents）”和“数字员工”为代表的前沿技术，开发智能预测与自动订货系统，实现业务流程的高效自动化，赋能数据智能驱动实体零售的商业化爆发。
             </p>
             
             <h3>核心专业领域</h3>
@@ -211,20 +263,20 @@ function App() {
               <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-md)' }}>
                 <h4 style={{ color: 'hsl(var(--secondary))', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                  1. AI 智能体（AI Agents）顶层设计与落地
+                  1. 企业级 AI 智能体与数字员工底座
                 </h4>
                 <p style={{ fontSize: '0.92rem', color: 'hsl(var(--text-secondary))', lineHeight: '1.6' }}>
-                  探索并设计多智能体（Multi-Agent）在连锁零售、客户服务等场景中的协同工作机制，实现核心业务流程的自适应智能化与效能最大化。
+                  构建以统一平台托管、多模态智能体协同为代表的零售数智化基础设施，赋能供应链、客服与内部督导等核心业务全流程自适应提效。
                 </p>
               </div>
 
               <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-md)' }}>
                 <h4 style={{ color: 'hsl(var(--primary))', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                  2. 大数据资产化与商业化变现
+                  2. AI 智能订货与零售大数据资产化
                 </h4>
                 <p style={{ fontSize: '0.92rem', color: 'hsl(var(--text-secondary))', lineHeight: '1.6' }}>
-                  打通并整合庞大且复杂的供应链、仓储物流及终端销售多维数据流，将数据转化为高商业价值资产，赋能实体门店科学经营决策与精准营销。
+                  以智能需求预测和订单自动化流转为抓手，融合复杂多维销售数据流，降低生鲜耗损，实现数据资产向实际业绩和周转效率的高效变现。
                 </p>
               </div>
 
