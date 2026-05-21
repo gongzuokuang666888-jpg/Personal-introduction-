@@ -97,6 +97,8 @@ function App() {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   // Set theme attributes on HTML root
   useEffect(() => {
@@ -131,13 +133,43 @@ function App() {
       return;
     }
 
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', message: '' });
-    
-    // Reset success message after 5 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 5000);
+    setIsSending(true);
+    setSubmitError('');
+
+    fetch("https://formsubmit.co/ajax/gongzuokuang666888@gmail.com", {
+      method: "POST",
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        姓名: formData.name,
+        邮箱: formData.email,
+        留言内容: formData.message,
+        _subject: "【个人网站新留言】来自您的个人主页",
+        _captcha: "false"
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error("发送失败，请稍后重试");
+    })
+    .then(() => {
+      setIsSending(false);
+      setIsSubmitted(true);
+      setFormData({ name: '', email: '', message: '' });
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setIsSubmitted(false);
+      }, 5000);
+    })
+    .catch(error => {
+      setIsSending(false);
+      setSubmitError(error.message || '网络连接发生故障，请稍后重试');
+    });
   };
 
   // Filter projects based on active category
@@ -425,9 +457,20 @@ function App() {
                 {formErrors.message && <span style={{ color: 'hsl(var(--accent))', fontSize: '0.85rem' }}>{formErrors.message}</span>}
               </div>
 
-              <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '10px' }}>
-                提交留言
+              <button 
+                type="submit" 
+                className="btn btn-primary" 
+                style={{ width: '100%', marginTop: '10px' }}
+                disabled={isSending}
+              >
+                {isSending ? '正在发送...' : '提交留言'}
               </button>
+
+              {submitError && (
+                <div style={{ padding: '12px', borderRadius: 'var(--radius-sm)', background: 'hsl(var(--accent) / 0.1)', border: '1px solid hsl(var(--accent) / 0.3)', color: 'hsl(var(--accent))', textAlign: 'center', fontSize: '0.95rem' }}>
+                  ✗ {submitError}
+                </div>
+              )}
 
               {isSubmitted && (
                 <div style={{ padding: '12px', borderRadius: 'var(--radius-sm)', background: 'hsl(var(--secondary-glow))', border: '1px solid hsl(var(--secondary) / 0.3)', color: 'hsl(var(--secondary))', textAlign: 'center', fontSize: '0.95rem' }}>
