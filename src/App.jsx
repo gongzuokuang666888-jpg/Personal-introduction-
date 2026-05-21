@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
 import avatarImg from './assets/avatar.png'
 
+// 请在此处替换为您创建的 Google 表单链接
+// 并在 Google Forms 后台的 Responses (回复) 选项卡中开启 "Get email notifications for new responses" (接收新回复的电子邮件通知)
+const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScX9gqA20vA2e8YvX-placeholder-url/viewform?usp=sf_link";
+
 const PROJECTS_DATA = [
   {
     id: 1,
@@ -94,11 +98,6 @@ function App() {
   const [theme, setTheme] = useState('dark');
   const [activeCategory, setActiveCategory] = useState('All');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSending, setIsSending] = useState(false);
-  const [submitError, setSubmitError] = useState('');
 
   // Set theme attributes on HTML root
   useEffect(() => {
@@ -107,69 +106,6 @@ function App() {
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (formErrors[name]) {
-      setFormErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    const errors = {};
-    if (!formData.name.trim()) errors.name = '请输入您的姓名';
-    if (!formData.email.trim()) {
-      errors.email = '请输入您的电子邮箱';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = '请输入有效的电子邮箱地址';
-    }
-    if (!formData.message.trim()) errors.message = '请输入您的留言内容';
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    setIsSending(true);
-    setSubmitError('');
-
-    fetch("https://formsubmit.co/ajax/gongzuokuang666888@gmail.com", {
-      method: "POST",
-      headers: { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify({
-        姓名: formData.name,
-        邮箱: formData.email,
-        留言内容: formData.message,
-        _subject: "【个人网站新留言】来自您的个人主页",
-        _captcha: "false"
-      })
-    })
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      throw new Error("发送失败，请稍后重试");
-    })
-    .then(() => {
-      setIsSending(false);
-      setIsSubmitted(true);
-      setFormData({ name: '', email: '', message: '' });
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false);
-      }, 5000);
-    })
-    .catch(error => {
-      setIsSending(false);
-      setSubmitError(error.message || '网络连接发生故障，请稍后重试');
-    });
   };
 
   // Filter projects based on active category
@@ -415,69 +351,65 @@ function App() {
           </div>
 
           <div>
-            <form onSubmit={handleFormSubmit} className="glass-panel contact-form" noValidate>
-              <div className="form-group">
-                <label className="form-label" htmlFor="name">您的姓名</label>
-                <input 
-                  type="text" 
-                  id="name" 
-                  name="name" 
-                  className="form-input" 
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  placeholder="例如：张先生"
-                />
-                {formErrors.name && <span style={{ color: 'hsl(var(--accent))', fontSize: '0.85rem' }}>{formErrors.name}</span>}
+            <div className="glass-panel contact-card">
+              <div className="contact-card-icon">
+                <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" className="text-gradient">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
               </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="email">电子邮箱</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  name="email" 
-                  className="form-input" 
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="请输入您的邮箱地址"
-                />
-                {formErrors.email && <span style={{ color: 'hsl(var(--accent))', fontSize: '0.85rem' }}>{formErrors.email}</span>}
-              </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="message">留言内容</label>
-                <textarea 
-                  id="message" 
-                  name="message" 
-                  className="form-textarea" 
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  placeholder="请输入您的合作意向或留言..."
-                ></textarea>
-                {formErrors.message && <span style={{ color: 'hsl(var(--accent))', fontSize: '0.85rem' }}>{formErrors.message}</span>}
-              </div>
-
-              <button 
-                type="submit" 
-                className="btn btn-primary" 
-                style={{ width: '100%', marginTop: '10px' }}
-                disabled={isSending}
+              
+              <h3 className="contact-card-title" style={{ marginTop: '16px', marginBottom: '12px' }}>在线留言与合作</h3>
+              
+              <p className="contact-card-desc" style={{ color: 'hsl(var(--text-secondary))', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '24px' }}>
+                如果您有项目合作意向、行业交流或任何咨询需求，欢迎点击下方按钮填写留言表单。提交后系统将通过邮件即时通知我，我会尽快与您取得联系。
+              </p>
+              
+              <a 
+                href={GOOGLE_FORM_URL} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="btn btn-primary contact-card-btn"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  width: '100%', 
+                  padding: '14px 24px',
+                  fontWeight: '600',
+                  fontSize: '1rem',
+                  borderRadius: 'var(--radius-md)',
+                  textDecoration: 'none'
+                }}
               >
-                {isSending ? '正在发送...' : '提交留言'}
-              </button>
+                <span>填写留言表单 (Google Forms)</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '8px', transition: 'transform var(--transition-fast)' }}>
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </a>
 
-              {submitError && (
-                <div style={{ padding: '12px', borderRadius: 'var(--radius-sm)', background: 'hsl(var(--accent) / 0.1)', border: '1px solid hsl(var(--accent) / 0.3)', color: 'hsl(var(--accent))', textAlign: 'center', fontSize: '0.95rem' }}>
-                  ✗ {submitError}
-                </div>
-              )}
-
-              {isSubmitted && (
-                <div style={{ padding: '12px', borderRadius: 'var(--radius-sm)', background: 'hsl(var(--secondary-glow))', border: '1px solid hsl(var(--secondary) / 0.3)', color: 'hsl(var(--secondary))', textAlign: 'center', fontSize: '0.95rem' }}>
-                  ✓ 留言发送成功！我会尽快给您答复。
-                </div>
-              )}
-            </form>
+              <div className="contact-card-tips" style={{ marginTop: '28px', paddingTop: '20px', borderTop: '1px solid hsl(var(--border-color))' }}>
+                <div style={{ fontWeight: '600', fontSize: '0.9rem', marginBottom: '8px', color: 'hsl(var(--text-primary))' }}>填写须知：</div>
+                <ul style={{ listStyleType: 'none', paddingLeft: '0', margin: '0', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <li style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))', display: 'flex', alignItems: 'flex-start' }}>
+                    <span style={{ color: 'hsl(var(--primary))', marginRight: '6px' }}>•</span>
+                    <span>请在表单中留下您的真实姓名与电子邮箱，以便我能及时答复。</span>
+                  </li>
+                  <li style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))', display: 'flex', alignItems: 'flex-start' }}>
+                    <span style={{ color: 'hsl(var(--primary))', marginRight: '6px' }}>•</span>
+                    <span>此表单支持上传附件（如您的项目方案、需求说明书等）。</span>
+                  </li>
+                  <li style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))', display: 'flex', alignItems: 'flex-start' }}>
+                    <span style={{ color: 'hsl(var(--primary))', marginRight: '6px' }}>•</span>
+                    <span>若遇网络原因打不开表单，亦可直接通过左侧的电子邮箱或微信联络我。</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
