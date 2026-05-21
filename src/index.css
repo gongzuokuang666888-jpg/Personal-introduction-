@@ -797,3 +797,130 @@ p {
     transform: translateY(0px);
   }
 }
+
+/* ==========================================================================
+   Premium Interactive Effects & Scroll Reveals
+   ========================================================================== */
+
+/* 1. Scroll Progress Bar */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  z-index: 9999;
+  width: 0%;
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 8px hsl(var(--primary) / 0.5);
+}
+
+/* 2. Ambient Cursor Glow */
+.cursor-glow, .cursor-glow-2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform;
+}
+
+.cursor-glow {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%);
+  filter: blur(40px);
+}
+
+.cursor-glow-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, hsl(var(--secondary) / 0.1) 0%, transparent 70%);
+  filter: blur(50px);
+  margin-left: -50px;
+  margin-top: -50px;
+}
+
+/* Light Theme Adjustments for Cursor Glow */
+[data-theme="light"] .cursor-glow {
+  background: radial-gradient(circle, hsl(var(--primary) / 0.06) 0%, transparent 70%);
+}
+
+[data-theme="light"] .cursor-glow-2 {
+  background: radial-gradient(circle, hsl(var(--secondary) / 0.04) 0%, transparent 70%);
+}
+
+/* Hide cursor glow on touch screens */
+@media (hover: none) or (max-width: 768px) {
+  .cursor-glow, .cursor-glow-2 {
+    display: none !important;
+  }
+}
+
+/* 3. Typing Effect Blinking Cursor */
+.typed-cursor {
+  color: hsl(var(--primary));
+  font-weight: 300;
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* 4. Scroll Reveal Keyframe Transitions */
+.reveal-left, .reveal-right, .reveal-scale {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.reveal-left {
+  transform: translateX(-35px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-right {
+  transform: translateX(35px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-scale {
+  transform: scale(0.95) translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Active states triggered when parent .reveal is active */
+.reveal.active .reveal-left,
+.reveal.active .reveal-right {
+  opacity: 1;
+  transform: translate(0);
+}
+
+.reveal.active .reveal-scale {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* For elements that are their own reveal trigger (like the projects header) */
+.reveal:not(section) {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.reveal:not(section).active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Transition Delays */
+.delay-100 { transition-delay: 100ms !important; }
+.delay-200 { transition-delay: 200ms !important; }
+.delay-300 { transition-delay: 300ms !important; }
+.delay-400 { transition-delay: 400ms !important; }
+.delay-500 { transition-delay: 500ms !important; }
+

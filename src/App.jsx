@@ -100,10 +100,108 @@ function App() {
   const [isSending, setIsSending] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  // 1. 鼠标跟随背景光晕状态
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [smoothedMousePos, setSmoothedMousePos] = useState({ x: 0, y: 0 });
+
+  // 2. 页面滚动进度状态
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  // 3. 动态打字机效果状态
+  const TYPED_WORDS = ["落地实践专家", "多智能体生态构建者", "大数据分析科学家"];
+  const [wordIdx, setWordIdx] = useState(0);
+  const [typedText, setTypedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
   // Set theme attributes on HTML root
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
+
+  // 监听鼠标移动
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // 鼠标平滑缓动效果 (Spring interpolation)
+  useEffect(() => {
+    let animationFrameId;
+    const updateSmoothedPosition = () => {
+      setSmoothedMousePos(prev => {
+        const dx = mousePos.x - prev.x;
+        const dy = mousePos.y - prev.y;
+        const ease = 0.08; // 缓动系数，越小越平滑
+        return {
+          x: prev.x + dx * ease,
+          y: prev.y + dy * ease
+        };
+      });
+      animationFrameId = requestAnimationFrame(updateSmoothedPosition);
+    };
+    animationFrameId = requestAnimationFrame(updateSmoothedPosition);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [mousePos]);
+
+  // 监听滚动进度
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll > 0) {
+        setScrollProgress((window.scrollY / totalScroll) * 100);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // 打字机逻辑
+  useEffect(() => {
+    let timer;
+    const currentWord = TYPED_WORDS[wordIdx];
+    const speed = isDeleting ? 40 : 100;
+
+    if (!isDeleting && typedText === currentWord) {
+      timer = setTimeout(() => setIsDeleting(true), 2000);
+    } else if (isDeleting && typedText === "") {
+      setIsDeleting(false);
+      setWordIdx(prev => (prev + 1) % TYPED_WORDS.length);
+    } else {
+      timer = setTimeout(() => {
+        setTypedText(
+          isDeleting 
+            ? currentWord.substring(0, typedText.length - 1)
+            : currentWord.substring(0, typedText.length + 1)
+        );
+      }, speed);
+    }
+    return () => clearTimeout(timer);
+  }, [typedText, isDeleting, wordIdx]);
+
+  // IntersectionObserver 滚动渐入动效
+  useEffect(() => {
+    const revealElements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '0px 0px -40px 0px'
+      }
+    );
+    revealElements.forEach(el => observer.observe(el));
+    return () => {
+      revealElements.forEach(el => observer.unobserve(el));
+    };
+  }, []);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark');
@@ -179,6 +277,13 @@ function App() {
 
   return (
     <>
+      {/* 滚动进度条 */}
+      <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }} />
+
+      {/* 鼠标跟随背景光晕 */}
+      <div className="cursor-glow" style={{ transform: `translate3d(calc(${smoothedMousePos.x}px - 50%), calc(${smoothedMousePos.y}px - 50%), 0)` }} />
+      <div className="cursor-glow-2" style={{ transform: `translate3d(calc(${smoothedMousePos.x}px - 50%), calc(${smoothedMousePos.y}px - 50%), 0)` }} />
+
       {/* 导航栏 */}
       <header className="header">
         <div className="container nav">
@@ -248,7 +353,8 @@ function App() {
             <div className="hero-subtitle">百果园集团科技中心 生态负责人</div>
             <h1 className="hero-title">
               大数据与 AI 智能体 <br />
-              <span className="text-gradient">落地实践专家</span>
+              <span className="text-gradient typed-text">{typedText}</span>
+              <span className="typed-cursor">|</span>
             </h1>
             <p className="hero-description" style={{ fontSize: '1.05rem', lineHeight: '1.7' }}>
               具备超过 8 年大数据与人工智能产业应用经验，长期致力于推动 AI 与传统产业的深度融合，从顶层设计到项目落地的全链条推动能力。具备 10 年以上企业级资源协同与生态搭建经验，擅长构建以“政-产-学-研-资-用”为核心的复合型创新生态链。
@@ -268,9 +374,9 @@ function App() {
       </section>
 
       {/* 综合个人介绍 Section */}
-      <section id="about" className="section">
+      <section id="about" className="section reveal">
         <div className="container grid-2">
-          <div>
+          <div className="reveal-left">
             <h2>个人介绍</h2>
             <p style={{ marginTop: '20px', marginBottom: '16px', textIndent: '2em', lineHeight: '1.75' }}>
               张炜立，原深圳市大数据研究与应用协会秘书长、大数据分析师。具备超过 8 年大数据与人工智能产业应用经验，长期致力于推动 AI 与传统产业的深度融合，从顶层设计到项目落地的全链条推动能力。具备 10 年以上企业级资源协同与生态搭建经验，擅长构建以“政-产-学-研-资-用”为核心的复合型创新生态链。
@@ -289,7 +395,7 @@ function App() {
             </div>
           </div>
 
-          <div>
+          <div className="reveal-right delay-200">
             <h2>核心优势与价值</h2>
             <div className="value-pillars" style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="glass-panel" style={{ padding: '20px', borderRadius: 'var(--radius-md)' }}>
@@ -327,9 +433,9 @@ function App() {
       </section>
 
       {/* 实践项目 Section */}
-      <section id="projects" className="section">
+      <section id="projects" className="section reveal">
         <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }} className="reveal">
             <h2>核心实践项目</h2>
             <p style={{ marginTop: '12px', color: 'hsl(var(--text-secondary))' }}>
               聚焦人工智能落地、大数据应用与连锁零售产业升级的实践成果。
@@ -351,8 +457,8 @@ function App() {
           </div>
 
           <div className="grid-3 portfolio-grid">
-            {filteredProjects.map(project => (
-              <article key={project.id} className="glass-panel project-card">
+            {filteredProjects.map((project, idx) => (
+              <article key={project.id} className={`glass-panel project-card reveal-scale delay-${(idx % 3) * 100 + 100}`}>
                 <div className="project-icon">
                   {project.icon}
                 </div>
@@ -377,9 +483,9 @@ function App() {
       </section>
 
       {/* 生态合作 Section */}
-      <section id="contact" className="section">
+      <section id="contact" className="section reveal">
         <div className="container grid-2">
-          <div>
+          <div className="reveal-left">
             <h2>开启生态合作</h2>
             <p style={{ marginTop: '20px', marginBottom: '40px', maxWidth: '480px', color: 'hsl(var(--text-secondary))' }}>
               如果您希望探讨零售行业数字化升级、多智能体（Multi-Agent）系统落地，或进行政产学研资源生态合作对接，欢迎随时与我联系。
@@ -414,7 +520,7 @@ function App() {
             </div>
           </div>
 
-          <div>
+          <div className="reveal-right delay-200">
             <form onSubmit={handleFormSubmit} className="glass-panel contact-form" noValidate>
               <div className="form-group">
                 <label className="form-label" htmlFor="name">您的姓名</label>
